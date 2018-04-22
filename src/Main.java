@@ -8,7 +8,6 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
-import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 
 public class Main {
@@ -19,8 +18,6 @@ public class Main {
 		UI ui = new UI();
 		new Thread(() -> {
 			try {
-				Synthesizer synthesizer = MidiSystem.getSynthesizer();
-				synthesizer.open();
 				Sequencer seq = MidiSystem.getSequencer();
 				seq.setSequence(new BufferedInputStream(new FileInputStream(new File("test.midi"))));
 				seq.open();

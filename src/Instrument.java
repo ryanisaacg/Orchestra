@@ -10,7 +10,7 @@ public class Instrument {
 	
 	public Instrument(String image, int minimum, int maximum) {
 		try {
-			this.image = ImageIO.read(new File("img/" + image));
+			this.image = ImageIO.read(new File("custom_img/" + image));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

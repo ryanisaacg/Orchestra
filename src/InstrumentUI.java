@@ -20,7 +20,7 @@ static final int IMAGE_BOX = 128;
 			new Instrument("piano.png", 2, 5),
 			new Instrument("harpsichord.png", 6, 7),
 			new Instrument("marimba.png", 8, 15),
-			new Instrument("organ.png", 16, 23),
+			new Instrument("piano.png", 16, 23),
 			new Instrument("guitar.png", 24, 31),
 			new Instrument("guitar.png", 32, 39), //bass
 			new Instrument("violin.png", 40, 47),

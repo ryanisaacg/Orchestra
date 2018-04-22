@@ -8,17 +8,6 @@ static final int IMAGE_BOX = 128;
 	
 	private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 	
-	class VisualNote {
-		Note note;
-		int lifetime = 0;
-		int rotation; 
-		
-		VisualNote(Note note) {
-			this.note = note;
-			rotation = 90 + (int)((Math.random() - 0.5) * 25);
-		}
-	}
-	
 	ArrayList<VisualNote> notes = new ArrayList<>();
 	ArrayList<Integer> instruments = new ArrayList<>();
 	Instrument[] available_instruments;
@@ -48,7 +37,7 @@ static final int IMAGE_BOX = 128;
 	}
 	
 	private int findInstrumentX(int index) {
-		int cell_size = 1920 / instruments.size();
+		int cell_size = 1500 / instruments.size();
 		return index * cell_size + cell_size / 2;
 	}
 	
@@ -66,13 +55,13 @@ static final int IMAGE_BOX = 128;
 		for(int i = 0; i < notes.size(); i++) {
 			VisualNote note = notes.get(i);
 			g2d.setColor(new Color(0, 0, 0, 1 - note.lifetime / 1000.0f));
-			int x = findInstrumentX(note.note.instrument) + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
-			int y = findInstrumentY(note.note.instrument) - (int)(Math.sin(note.rotation * Math.PI / 180) * note.lifetime);
+			int index = Collections.binarySearch(instruments, note.note.instrument);
+			int x = findInstrumentX(index) + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
+			int y = findInstrumentY(index) - (int)(Math.sin(note.rotation * Math.PI / 180) * note.lifetime);
 			if(y < 0) {
 				notes.remove(i);
 				i--;
 			}
-			g2d.drawRect(x, y, 5, 5);
 			g2d.drawString(NOTE_NAMES[note.note.note], x, y);
 			note.lifetime += 3;
 		}

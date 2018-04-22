@@ -8,18 +8,31 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main {
 	static final int WIDTH = 1920;
 	static final int HEIGHT = 1080;
 	
 	public static void main(String[] args) throws MidiUnavailableException, FileNotFoundException, IOException, InvalidMidiDataException {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("eclipse-workspace/Orchestra"));
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	        "MIDI Files", "mid", "midi");
+	    chooser.setFileFilter(filter);
+	    int returnVal = chooser.showOpenDialog(null);
+	    if(returnVal != JFileChooser.APPROVE_OPTION) {
+	       JOptionPane.showMessageDialog(null, "Please choose a file");
+	       return;
+	    }
 		UI ui = new UI();
 		new Thread(() -> {
 			try {
 				Sequencer seq = MidiSystem.getSequencer();
-				seq.setSequence(new BufferedInputStream(new FileInputStream(new File("test.midi"))));
+				seq.setSequence(new BufferedInputStream(new FileInputStream(chooser.getSelectedFile())));
 				seq.open();
 				seq.getTransmitter().setReceiver(new NoteReceiver(ui::addNote));
 				seq.start();

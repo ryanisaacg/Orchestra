@@ -69,7 +69,6 @@ public class UI extends JPanel {
 	public synchronized void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 		super.paintComponent(g);
-		g2d.setColor(Color.black);
 		for(int i = 0; i < instruments.size(); i++) {
 			int index = findInstrument(instruments.get(i));
 			if(index != -1) {
@@ -78,8 +77,13 @@ public class UI extends JPanel {
 		}
 		for(int i = 0; i < notes.size(); i++) {
 			VisualNote note = notes.get(i);
+			g2d.setColor(new Color(0, 0, 0, 1 - note.lifetime / 1000.0f));
 			int x = findInstrumentX(note.note.instrument) + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
 			int y = findInstrumentY(note.note.instrument) - (int)(Math.sin(note.rotation * Math.PI / 180) * note.lifetime);
+			if(y < 0) {
+				notes.remove(i);
+				i--;
+			}
 			g2d.drawRect(x, y, 5, 5);
 			g2d.drawString(NOTE_NAMES[note.note.note], x, y);
 			note.lifetime += 3;

@@ -62,7 +62,7 @@ static final int IMAGE_BOX = 128;
 			Color c = NOTE_COLORS[note.note.note];
 			g2d.setColor(new Color(c.getRed() / 255.0f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, 1 - note.lifetime / 1000.0f));
 			int index = Collections.binarySearch(instruments, note.note.instrument);
-			int x = findInstrumentX(index) + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
+			int x = findInstrumentX(index) + 48 + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
 			int y = findInstrumentY(index) - (int)(Math.sin(note.rotation * Math.PI / 180) * note.lifetime);
 			if(y < 0) {
 				notes.remove(i);

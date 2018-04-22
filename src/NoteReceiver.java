@@ -5,25 +5,28 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
 class NoteReceiver implements Receiver {
-	Consumer<Note> noteCallback;
-	
-	public NoteReceiver(Consumer<Note> noteCallback) {
-		this.noteCallback = noteCallback;
+	InstrumentUI ui;
+
+	@SuppressWarnings("unchecked")
+	public NoteReceiver(InstrumentUI ui) {
+		this.ui = ui;
 	}
-	
+
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
-		if(message instanceof ShortMessage) {
-			ShortMessage sm = (ShortMessage)message;
+		if (message instanceof ShortMessage) {
+			ShortMessage sm = (ShortMessage) message;
 			if (sm.getCommand() == ShortMessage.NOTE_ON) {
-				noteCallback.accept(new Note(sm.getChannel(), sm.getData1() % 12));
+				ui.addNote(new Note(sm.getChannel(), sm.getData1() % 12));
+			} else if (sm.getCommand() == ShortMessage.PROGRAM_CHANGE) {
+				ui.setInstrument(new InstrumentIndex(sm.getChannel(), sm.getData1()));
 			}
-	    }
+		}
 	}
-	
+
 	@Override
 	public void close() {
-		
+
 	}
 
 }

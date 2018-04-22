@@ -34,7 +34,7 @@ public class Main {
 				Sequencer seq = MidiSystem.getSequencer();
 				seq.setSequence(new BufferedInputStream(new FileInputStream(chooser.getSelectedFile())));
 				seq.open();
-				seq.getTransmitter().setReceiver(new NoteReceiver(ui::addNote));
+				seq.getTransmitter().setReceiver(new NoteReceiver(ui.instruments));
 				seq.start();
 			} catch (MidiUnavailableException | IOException | InvalidMidiDataException e) {
 				// TODO Auto-generated catch block

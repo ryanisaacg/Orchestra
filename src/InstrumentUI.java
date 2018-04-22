@@ -53,34 +53,31 @@ static final int IMAGE_BOX = 128;
 		g2d.setFont(font);
 		for(int i = 0; i < instruments.size(); i++) {
 			int index = findInstrument(instruments.get(i));
-			if(index != -1) {
-				g2d.drawImage(available_instruments[index].image, findInstrumentX(i), findInstrumentY(i), 96, 96, null);
-			}
+			index = index == -1 ? 3 : index;
+			g2d.drawImage(available_instruments[index].image, findInstrumentX(i), findInstrumentY(i), 96, 96, null);
 		}
 		for(int i = 0; i < notes.size(); i++) {
 			VisualNote note = notes.get(i);
 			Color c = NOTE_COLORS[note.note.note];
 			g2d.setColor(new Color(c.getRed() / 255.0f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, 1 - note.lifetime / 1000.0f));
-			int index = Collections.binarySearch(instruments, note.note.instrument);
+			int index = note.note.instrument;
 			int x = findInstrumentX(index) + 48 + (int)(Math.cos(note.rotation * Math.PI / 180) * note.lifetime);
 			int y = findInstrumentY(index) - (int)(Math.sin(note.rotation * Math.PI / 180) * note.lifetime);
+			g2d.drawString(NOTE_NAMES[note.note.note], x, y);
+			note.lifetime += 5;
 			if(y < 0) {
 				notes.remove(i);
 				i--;
 			}
-			
-			g2d.drawString(NOTE_NAMES[note.note.note], x, y);
-			note.lifetime += 5;
 		}
 		g2d.setColor(Color.white);
 	}
 	
 	void addNote(Note note) {
-		if(findInstrument(note.instrument) == -1) return;
 		notes.add(new VisualNote(note));
-		int index = Collections.binarySearch(instruments, note.instrument);
-		if(index < 0) {
-			instruments.add(-(index + 1), note.instrument);
-		}
+	}
+	
+	void setInstrument(InstrumentIndex index) {
+		instruments.add(index.instrument, index.instrument_type);
 	}
 }
